@@ -1,4 +1,4 @@
-<!DOCTYPE html><html><head><title>Calvin and Hobbes Animation</title>
+<!DOCTYPE html><html><head><title>The Koch Snowflake as an Iterating Path</title>
 
 <link rel="stylesheet" type="text/css" href="style.css">
 <link rel="shortcut icon" href="favicon.ico">
@@ -20,8 +20,7 @@
 		<div id="popup1" class="overlay">
 			<div class="popup">
 				<a class="close" style="right: 30px;" href="#">&times;</a>
-				<div style="font-family:Georgia; color:white; text-align:center; text-decoration:underline; font-size:38px">The Koch Snowflake</div>
-				<span style="font-family:Georgia; font-size:30px; color:white; text-align:justify;"><br>A simple animation Generating the Koch Snowflake as an iterated path.<br></span><br><br>
+				<span style="font-family:Georgia; font-size:30px; color:white; text-align:justify;"><br>A simple animation approximating the Koch Snowflake as an iterating path.<br></span><br><br>
 			</div>
 		</div>
 
@@ -32,30 +31,50 @@
 
 <script type="text/javascript">
 
-var field={width:600, height:600};
+var field={width:606, height:702};
 var fieldcolor="white";
-var canvas = document.getElementById("canvas"),
-    ctx = canvas.getContext("2d");
+var canvas=document.getElementById("canvas"), ctx = canvas.getContext("2d");
+var currentx=303;
+var currenty=5;
+var scale=600;
+var steps=30;
+var frame=0;
+var fps=40;
+var instruction=0;
+var commands="24621324354651";
+var iteration=1;
+var iterationstage=0;
+var iterationstages=3;
+var colours=["black", "red"];
+var colour=0;
 
 canvas.width = field.width;
 canvas.height = field.height;
 
+ctx.fillStyle=fieldcolor;
+ctx.fillRect(0,0,field.width,field.height);
+
 function draw(){
+	if(iterationstage==iterationstages){iterationstages=iterationstages*4; iterationstage=0; steps=steps/3; scale=scale/3; colour=colour%2; colour++;}
+	if(instruction<commands.length){iterationstage++; piece(commands[instruction]);}
+}
 
+function piece(n){
 	ctx.beginPath();
-	ctx.moveTo(30,30);
-	ctx.lineTo(270,270);
-	ctx.lineWidth=1;
-	ctx.strokeStyle="black";
+	ctx.moveTo(currentx,currenty);
+	if(n==1){currentx=currentx-(1/steps)*scale;}
+	if(n==2){currentx=currentx-(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty+(1/steps)*Math.sin(Math.PI/3)*scale;}
+	if(n==3){currentx=currentx+(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty+(1/steps)*Math.sin(Math.PI/3)*scale;}
+	if(n==4){currentx=currentx+(1/steps)*scale;}
+	if(n==5){currentx=currentx+(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty-(1/steps)*Math.sin(Math.PI/3)*scale;}
+	if(n==6){currentx=currentx-(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty-(1/steps)*Math.sin(Math.PI/3)*scale;}
+	ctx.lineTo(currentx,currenty);
+	ctx.lineWidth=4;
+	ctx.strokeStyle=colours[colour];
 	ctx.stroke();
-
-
-time++;
-
-if(time>1049){time=-100;}
-
-setTimeout(draw, Math.floor(1000/fps));
-
+	frame++;
+	if(frame<steps){setTimeout(piece, 1000/fps, n);}
+	if(frame==steps){instruction++; frame=0; draw();}
 }
 
 draw();
