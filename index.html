@@ -20,35 +20,38 @@
 		<div id="popup1" class="overlay">
 			<div class="popup">
 				<a class="close" style="right: 30px;" href="#">&times;</a>
-				<span style="font-family:Georgia; font-size:30px; color:white; text-align:justify;"><br>A simple animation approximating the Koch Snowflake as an iterating path.<br></span><br><br>
+				<span style="font-family:Georgia; font-size:30px; color:white; text-align:justify;"><br>A simple animation approximating the Koch Snowflake as an iterating path, made as a warm up for further fractal work.<br><br>Once I had the pathing maths down I played around with the colours and filled triangles to give it a sort of Grixis spellcast effect.<br></span><br><br>
 			</div>
 		</div>
 
 		<canvas id="canvas" style="padding:0px 80px 0px 80px;"></canvas>
+		<a id="bongo"></a>
   </center>
 </body>
 </html>
 
 <script type="text/javascript">
 
-var field={width:606, height:702};
+var field={width:616, height:702};
 var fieldcolor="white";
 var canvas=document.getElementById("canvas"), ctx = canvas.getContext("2d");
-var currentx=303;
+var currentx=308;
 var currenty=5;
 var scale=600;
-var steps=Math.pow(3,5);
+var steps=Math.pow(2,5);
 var frame=0;
 var fps=1000;
 var instruction=0;
-var commands="246213243546516";
-generatecommands("LLLLRLRLRLRLRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLR");
+var commands;
 var iteration=1;
 var iterationstage=0;
 var iterationstages=3;
-var colours=["black", "red", "blue"];
+var colours=["black", "#EE0000", "#2277FF"];
 var colour=0;
 var thickness=20;
+var code=[];
+generatecode(6);
+generatecommands(code[6]);
 
 canvas.width = field.width;
 canvas.height = field.height;
@@ -57,7 +60,115 @@ ctx.fillStyle=fieldcolor;
 ctx.fillRect(0,0,field.width,field.height);
 
 function draw(){
-	if(iterationstage==iterationstages){iterationstages=iterationstages*4; iterationstage=0; steps=steps/3; scale=scale/3; colour++; colour=colour%3; thickness=thickness*2/3;}
+	if(iterationstage==iterationstages){iterationstages=iterationstages*4; iterationstage=0; steps=steps*0.5; if(steps<2){steps=2;} scale=scale/3; colour++; colour=colour%3; thickness=thickness*0.5;}
+
+	if(steps<15){
+		ctx.beginPath();
+		ctx.moveTo(401,200);
+		ctx.lineTo(314,350);
+		ctx.lineTo(488,350);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(215,200);
+		ctx.lineTo(302,350);
+		ctx.lineTo(128,350);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(308,359);
+		ctx.lineTo(395,508);
+		ctx.lineTo(221,508);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.moveTo(currentx,currenty);
+	}
+
+	if(thickness<1){
+		ctx.beginPath();
+		ctx.moveTo(285,0);
+		ctx.lineTo(0,0);
+		ctx.lineTo(0,164);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(616-285,702);
+		ctx.lineTo(616,702);
+		ctx.lineTo(616,702-164);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+		ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(0,702);
+		ctx.lineTo(285,702);
+		ctx.lineTo(0,702-164);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+		ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(616-285,0);
+		ctx.lineTo(616,0);
+		ctx.lineTo(616,164);
+		ctx.fillStyle = "rgba(0, 0, 0, 0.02)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.moveTo(currentx,currenty);
+	}
+
+	if(steps<4){
+		ctx.beginPath();
+		ctx.moveTo(491,358);
+		ctx.lineTo(404,508);
+		ctx.lineTo(578,508);
+		ctx.fillStyle = "rgba(220, 0, 0, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(124,358);
+		ctx.lineTo(211,508);
+		ctx.lineTo(37,508);
+		ctx.fillStyle = "rgba(220, 0, 0, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(308,37);
+		ctx.lineTo(395,190);
+		ctx.lineTo(221,190);
+		ctx.fillStyle = "rgba(220, 0, 0, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.moveTo(currentx,currenty);
+	}
+
+	if(steps<8){
+		ctx.beginPath();
+		ctx.moveTo(308,673);
+		ctx.lineTo(384,541);
+		ctx.lineTo(232,541);
+		ctx.fillStyle = "rgba(0, 100, 230, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(105,324);
+		ctx.lineTo(181,190);
+		ctx.lineTo(29,190);
+		ctx.fillStyle = "rgba(0, 100, 230, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.beginPath();
+		ctx.moveTo(511,324);
+		ctx.lineTo(435,190);
+		ctx.lineTo(587,190);
+		ctx.fillStyle = "rgba(0, 100, 230, 0.01)";
+		ctx.closePath();
+	  ctx.fill();
+		ctx.moveTo(currentx,currenty);
+	}
+
 	if(instruction<commands.length){iterationstage++; piece(commands[instruction]);}
 }
 
@@ -79,7 +190,7 @@ function piece(n){
 	if(frame==steps){instruction++; frame=0; draw();}
 }
 
-function LorR(d, ls){
+function LorR(d, ls){ // I did this a clever way at first, but there was a really annoying bug that I just COULDN'T see the reason for so went with a dumb lookup table in the end
 	if(d=="L" && ls==1){return 3}
 	if(d=="L" && ls==2){return 4}
 	if(d=="L" && ls==3){return 5}
@@ -99,6 +210,19 @@ function generatecommands(p){
 	for(i=1; i<p.length; i++){
 		commands= commands + "" + LorR(p[i],commands[i-1]);
 	}
+}
+
+function generatecode(n){
+	code[0]="LLL";
+	code[n]="";
+	for(i=1; i<n; i++){
+		code[n]=code[n]+""+code[i-1];
+		code[i]="";
+		for(j=0; j<code[i-1].length; j++){
+			code[i]=code[i]+""+code[i-1][j]+""+"RLR";
+		}
+	}
+	code[n]=code[n]+""+code[n-1];
 }
 
 draw();
