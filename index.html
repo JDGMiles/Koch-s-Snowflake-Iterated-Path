@@ -37,16 +37,18 @@ var canvas=document.getElementById("canvas"), ctx = canvas.getContext("2d");
 var currentx=303;
 var currenty=5;
 var scale=600;
-var steps=30;
+var steps=Math.pow(3,5);
 var frame=0;
-var fps=40;
+var fps=1000;
 var instruction=0;
-var commands="24621324354651";
+var commands="246213243546516";
+generatecommands("LLLLRLRLRLRLRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLRLRLRRRLRLRLRRRLRRRLRRRLRLRLRRRLR");
 var iteration=1;
 var iterationstage=0;
 var iterationstages=3;
-var colours=["black", "red"];
+var colours=["black", "red", "blue"];
 var colour=0;
+var thickness=20;
 
 canvas.width = field.width;
 canvas.height = field.height;
@@ -55,7 +57,7 @@ ctx.fillStyle=fieldcolor;
 ctx.fillRect(0,0,field.width,field.height);
 
 function draw(){
-	if(iterationstage==iterationstages){iterationstages=iterationstages*4; iterationstage=0; steps=steps/3; scale=scale/3; colour=colour%2; colour++;}
+	if(iterationstage==iterationstages){iterationstages=iterationstages*4; iterationstage=0; steps=steps/3; scale=scale/3; colour++; colour=colour%3; thickness=thickness*2/3;}
 	if(instruction<commands.length){iterationstage++; piece(commands[instruction]);}
 }
 
@@ -69,12 +71,34 @@ function piece(n){
 	if(n==5){currentx=currentx+(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty-(1/steps)*Math.sin(Math.PI/3)*scale;}
 	if(n==6){currentx=currentx-(1/steps)*Math.cos(Math.PI/3)*scale; currenty=currenty-(1/steps)*Math.sin(Math.PI/3)*scale;}
 	ctx.lineTo(currentx,currenty);
-	ctx.lineWidth=4;
+	ctx.lineWidth=thickness;
 	ctx.strokeStyle=colours[colour];
 	ctx.stroke();
 	frame++;
 	if(frame<steps){setTimeout(piece, 1000/fps, n);}
 	if(frame==steps){instruction++; frame=0; draw();}
+}
+
+function LorR(d, ls){
+	if(d=="L" && ls==1){return 3}
+	if(d=="L" && ls==2){return 4}
+	if(d=="L" && ls==3){return 5}
+	if(d=="L" && ls==4){return 6}
+	if(d=="L" && ls==5){return 1}
+	if(d=="L" && ls==6){return 2}
+	if(d=="R" && ls==1){return 6}
+	if(d=="R" && ls==2){return 1}
+	if(d=="R" && ls==3){return 2}
+	if(d=="R" && ls==4){return 3}
+	if(d=="R" && ls==5){return 4}
+	if(d=="R" && ls==6){return 5}
+}
+
+function generatecommands(p){
+	commands="2";
+	for(i=1; i<p.length; i++){
+		commands= commands + "" + LorR(p[i],commands[i-1]);
+	}
 }
 
 draw();
